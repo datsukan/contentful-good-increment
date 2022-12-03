@@ -1,7 +1,7 @@
 # contentful-good-increment-lambda
 
-Contentfulでいいね数を管理している場合に、いいね数をプラス（インクリメント）する処理です。
-LocalでのCLI実行、AWS LambdaでAPI Gatewayを経由した実行を可能にしています。
+Contentfulでいいね数を管理している場合に、いいね数をプラス（インクリメント）する処理です。  
+LocalでのCLI実行、AWS LambdaでAPI Gatewayを経由した実行を可能にしています。  
 Goで記述されています。
 
 ## Settings
@@ -40,14 +40,14 @@ Web上で管理コンソールから [ Lambda > 関数 > contentful-good-increme
 
 ### いいね数の枠を用意
 
-`Content model`を新規作成して`Field`として`goods`を追加する。
+`Content model`を新規作成して`Field`として`goods`を追加する。  
 これがいいね数を保持する箇所となる。
 
 その上でContentから新規でgoodsのentryを作成する。
 
 ### Localの確認・変更
 
-[ Contentful dashboard > Settings > Locales ] で`Locale`を`Japanese (ja)`にする。
+[ Contentful dashboard > Settings > Locales ] で`Locale`を`Japanese (ja)`にする。  
 デフォルト値の`English (en)`で使用したい場合は本リポジトリの`response/lang.go`の`LangNum`を`Ja`→`En`＆`ja`→`en`、およびこの構造体を参照する箇所をすべて`En`に修正する。
 
 ## How to use
@@ -60,7 +60,7 @@ go run main.go -local -id=xxxxxxxxxxxxxxxxxxxxxxxx
 
 `id`はContentfulのContentからいいね数のentryを開き、右サイドバーのinfoタブに記載されている`ENTRY ID`の値を使用する。
 
-実行した結果、いいね数が標準出力にJSONで表示されれば問題ない。
+実行した結果、いいね数が標準出力にJSONで表示されれば問題ない。  
 ContentfulのWebアプリ上でも更新されていることを確認する。
 
 ### API Gateway / AWS Lambdaでの実行
@@ -76,19 +76,19 @@ Web上で管理コンソールから [ Lambda > 関数 > contentful-good-increme
 
 #### 3. 実行ファイルをアップロードする
 
-本リポジトリのソースコードをLocalにcloneする。
-cloneしたディレクトリ内でビルド（`go build`）を実行する。
-生成された`contentful-good-increment-lambda`ファイルをZipに圧縮する。
+本リポジトリのソースコードをLocalにcloneする。  
+cloneしたディレクトリ内でビルド（`go build`）を実行する。  
+生成された`contentful-good-increment-lambda`ファイルをZipに圧縮する。  
 Web上で管理コンソールから [ Lambda > 関数 > contentful-good-increment > コード > コードソース > アップロード先 > .zipファイル ] を開き、先程生成したZipファイルを選択してアップロードする。
 
 #### 4. API GatewayでREST APIを作成する
 
-APIを作成で`REST API`を選択して構築する。
-API名は`contentful-good`とする。（任意）
-リソースのアクションで`リソースの作成`を選択して`{article_id}`を作成する。
-`{article_id}`にネストさせてさらに`リソースの作成`で`increment`を作成する。
-`increment`に対してアクションで`メソッドの作成`を選択してPUTリクエストを選択する。
-統合タイプは`Lambda 関数`、Lambda プロキシ統合の使用はON、Lambda関数は`contentful-good-increment`（任意で変更した場合は合わせて入力）を設定して保存する。
+APIを作成で`REST API`を選択して構築する。  
+API名は`contentful-good`とする。（任意）  
+リソースのアクションで`リソースの作成`を選択して`{article_id}`を作成する。  
+`{article_id}`にネストさせてさらに`リソースの作成`で`increment`を作成する。  
+`increment`に対してアクションで`メソッドの作成`を選択してPUTリクエストを選択する。  
+統合タイプは`Lambda 関数`、Lambda プロキシ統合の使用はON、Lambda関数は`contentful-good-increment`（任意で変更した場合は合わせて入力）を設定して保存する。  
 アクションで`APIのデプロイ`を選択して、ステージの`URLの呼び出し`に記載されているURLを控えておく。
 
 #### 5. WebAPIへリクエストを行う
@@ -101,5 +101,5 @@ API Gatewayでデプロイ時に控えたURLに対してリクエストを行い
 
 `{article_id}`の箇所はContentfulで作成したContentのentryのIDを入れる。
 
-実行した結果、ステータス：200で更新後のいいね数がJSONでレスポンスされれば問題ない。
+実行した結果、ステータス：200で更新後のいいね数がJSONでレスポンスされれば問題ない。  
 ContentfulのWebアプリ上でも更新されていることを確認する。
