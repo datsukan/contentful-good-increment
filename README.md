@@ -4,6 +4,12 @@ Contentfulでいいね数を管理している場合に、いいね数をプラ�
 LocalでのCLI実行、AWS LambdaでAPI Gatewayを経由した実行を可能にしています。  
 Goで記述されています。
 
+下記のリポジトリも合わせて参照ください。
+
+- [いいねボタンをWeb上からクリック可能にするフロントエンドの実装](https://github.com/datsukan/good-button)
+- [いいね数を参照する実装](https://github.com/datsukan/contentful-good-ref-lambda)
+- [いいね数をデクリメントする実装](https://github.com/datsukan/contentful-good-decrement-lambda)
+
 ## Settings
 
 ### 環境変数の設定
@@ -85,18 +91,25 @@ Web上で管理コンソールから [ Lambda > 関数 > contentful-good-increme
 
 APIを作成で`REST API`を選択して構築する。  
 API名は`contentful-good`とする。（任意）  
+
 リソースのアクションで`リソースの作成`を選択して`{article_id}`を作成する。  
+
 `{article_id}`にネストさせてさらに`リソースの作成`で`increment`を作成する。  
+
 `increment`に対してアクションで`メソッドの作成`を選択してPUTリクエストを選択する。  
 統合タイプは`Lambda 関数`、Lambda プロキシ統合の使用はON、Lambda関数は`contentful-good-increment`（任意で変更した場合は合わせて入力）を設定して保存する。  
+
+`increment`に対してアクションで`メソッドの作成`を選択してCORSの有効化を選択する。  
+設定内容はそのままで`CORSを有効にして既存のCORSヘッダーを置換`を実行する。
+
 アクションで`APIのデプロイ`を選択して、ステージの`URLの呼び出し`に記載されているURLを控えておく。
 
 #### 5. WebAPIへリクエストを行う
 
-API Gatewayでデプロイ時に控えたURLに対してリクエストを行い、インクリメントを実行する。
+API Gatewayでデプロイ時に控えたURLに対してPUTリクエストを行い、インクリメントを実行する。
 
 ```
-{url}/{article_id}/increment
+PUT {url}/{article_id}/increment
 ```
 
 `{article_id}`の箇所はContentfulで作成したContentのentryのIDを入れる。
